@@ -1,8 +1,19 @@
 import React, {useState} from 'react';
-import {Text, View, StyleSheet, TextInput, Button, TouchableHighlight } from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  TextInput,
+  Button,
+  TouchableHighlight,
+} from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const Formulario = () => {
+
+  const [fecha, setFecha] = useState('');
+  const [hora, sethora] = useState('');
+
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
 
@@ -15,8 +26,11 @@ const Formulario = () => {
   };
 
   const handleConfirmDate = (date) => {
-    console.warn('A date has been picked: ', date);
+    const options = { weekday : 'long', year : 'numeric', month : 'long', day : 'numeric'}
+    // console.warn('A date has been picked: ', date);
     hideDatePicker();
+    setFecha(date.toLocaleDateString('es-Es', date))    
+
   };
 
   // Time
@@ -30,11 +44,17 @@ const Formulario = () => {
   };
 
   const handleConfirmTime = (time) => {
-    console.warn('Hora ', time);
     hideTimepicker();
+
+    const options = { hour : 'numeric', minute : '2-digits'}
+    sethora(time.toLocaleString('en-US', options));
+    
+    console.warn('Hora ', time.toLocaleString('en-US', options));
+
+
+
   };
 
-  
   return (
     <>
       <View style={styles.formulario}>
@@ -58,28 +78,31 @@ const Formulario = () => {
         />
 
         <View>
+          <Text style={styles.label}>Fecha</Text>
           <Button title="Selecciona fecha" onPress={showDatePicker} />
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
             mode="date"
             onConfirm={handleConfirmDate}
             onCancel={hideDatePicker}
-            locale ="es_Es"
-            isDarkModeEnabled = {true}
+            locale="es_Es"
+            isDarkModeEnabled={true}
           />
+          <Text>{fecha}</Text>
         </View>
 
         <View>
+          <Text style={styles.label}>Hora</Text>
           <Button title="Selecciona Hora" onPress={showTimepicker} />
           <DateTimePickerModal
             isVisible={isTimePickerVisible}
             mode="time"
             onConfirm={handleConfirmTime}
             onCancel={hideTimepicker}
-            locale ="es_Es"
-            isDarkModeEnabled = {true}
-
+            locale="es_Es"
+            isDarkModeEnabled={true}
           />
+          <Text>{hora}</Text>
         </View>
 
         <Text style={styles.label}>Sintomas</Text>
